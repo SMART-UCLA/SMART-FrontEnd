@@ -5,6 +5,7 @@ import './App.css';
 import Home  from './components/Home';
 import GraphDay from './components/GraphDay';
 import LiveData from './components/LiveData';
+import TestGraph from './components/TestGraph'
 
 
 function App() {
@@ -12,6 +13,10 @@ function App() {
     <BrowserRouter>
         <Routes> 
             <Route exact path ="/" element={<Home />}/>
+            <Route exact path = "/TestData" element ={
+              <TestGraph/>
+            }
+            />
             <Route exact path = "/HistoricalData" element={
               <GraphDay
                 table={"apollo15int"}
