@@ -24,17 +24,25 @@ const TestGraph = () => {
   const [timestamps, setT] = useState([]);
   const [noDataMsg, setNoDataMsg] = useState("");
   const [currTabValue, setValue] = useState(null);
+  const [hoursToDisplay, setHours] = useState(1);
   const chartComponent = useRef(null);
 
-    async function getData() {
+    async function getData(numHours) {
       try {
-          const response = await Axios.get("http://localhost:8081/getlivegclouddata");
-          console.log(response.data);
-          let timestampArr = response.data.map(entry => parseFloat(entry.timestamp) * 1000) //s to ms
-                                                                                            //TODO: times are currently relative
-          let bxArr = response.data.map((entry, i) => [timestampArr[i], parseFloat(entry.nT1)]); //convert from string to float
-          let byArr = response.data.map((entry, i) => [timestampArr[i], parseFloat(entry.nT2)]);
-          let bzArr = response.data.map((entry, i) => [timestampArr[i], parseFloat(entry.nT3)]);
+          var response;
+          var timestampArr = [];
+          var bxArr = [];
+          var byArr = [];
+          var bzArr = [];
+          for (let j = 1; j <= numHours; j++) {
+            response = await Axios.get(`http://localhost:8081/getlivegclouddata/${j}`);
+            console.log(response.data);
+            timestampArr.unshift(...response.data.map(entry => parseFloat(entry.timestamp) * 1000)); //s to ms
+                                                                                              //TODO: times are currently relative
+            bxArr.unshift(...response.data.map((entry, i) => [timestampArr[i], parseFloat(entry.nT1)])); //convert from string to float
+            byArr.unshift(...response.data.map((entry, i) => [timestampArr[i], parseFloat(entry.nT2)]));
+            bzArr.unshift(...response.data.map((entry, i) => [timestampArr[i], parseFloat(entry.nT3)]));
+          }
 
           // console.log(bxArr);
           // console.log("by" + bxArr);
@@ -76,11 +84,11 @@ const TestGraph = () => {
     useEffect(() => {
       chart = chartComponent.current.chart;
       chart.showLoading();
-      getData();
+      getData(hoursToDisplay);
       chart.series[0].hide();
       chart.series[1].hide();
       chart.series[2].hide();
-    }, []);
+    }, [hoursToDisplay]);
 
     // //Sets the appropiate starting date for the first load
     // useEffect(() => {
@@ -234,6 +242,15 @@ const TestGraph = () => {
                 chart.series[1].hide(); chart.series[1].update({showInNavigator: false});
                 chart.series[2].show(); chart.series[2].update({showInNavigator: true});
                 break;
+            case '4':
+                setHours(1);
+                break;
+            case '5':
+                setHours(2);
+                break;
+            case '6':
+                setHours(5);
+                break;
         }
         setValue(value);
     }
@@ -253,6 +270,11 @@ const TestGraph = () => {
         <Tab label='Bx' value='1'/>
         <Tab label='By' value='2'/>
         <Tab label='Bz' value='3'/>
+      </Tabs>
+      <Tabs onChange={handleChange} value={currTabValue}>
+        <Tab label='1 hour' value='4'/>
+        <Tab label='2 hours' value='5'/>
+        <Tab label='5 hours' value='6'/>
       </Tabs>
       <HighchartsReact
         ref={chartComponent}

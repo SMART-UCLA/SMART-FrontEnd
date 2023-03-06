@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'; /*needed to change from Switch to Routes and change overall structure*/
+import { BrowserRouter, HashRouter, Routes, Route } from 'react-router-dom'; /*needed to change from Switch to Routes and change overall structure*/
 import './App.css';
 
 import Home  from './components/Home';
@@ -10,10 +10,10 @@ import TestGraph from './components/TestGraph'
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
         <Routes> 
             <Route exact path ="/" element={<Home />}/>
-            <Route exact path = "/TestData" element ={
+            <Route exact path = "/TestGraph" element ={
               <TestGraph/>
             }
             />
@@ -34,7 +34,7 @@ function App() {
               />}
             />
         </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
