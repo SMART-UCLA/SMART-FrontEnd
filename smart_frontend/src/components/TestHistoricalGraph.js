@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {Tabs, Tab} from '@mui/material'
+import {Tabs, Tab, TextField, Button} from '@mui/material'
 import { render } from 'react-dom';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
@@ -15,34 +15,38 @@ noDataToDisplay(Highcharts);
 Boost(Highcharts);
 
 var chart;
-const TestGraph = () => {
+const TestHistoricalGraph = () => {
 
 //   const [startDate, setStartDate] = useState(new Date(props.startingDate));
   const [bx, setBx] = useState([]);
   const [by, setBy] = useState([]);
   const [bz, setBz] = useState([]);
+  const [year, setYear] = useState(null);
+  const [month, setMonth] = useState(null);
+  const [day, setDay] = useState(null);
+  const [hour, setHour] = useState(null);
   const [timestamps, setT] = useState([]);
   const [noDataMsg, setNoDataMsg] = useState("");
   const [currTabValue, setTabValue] = useState(null);
   const [hoursToDisplay, setHours] = useState(1);
   const chartComponent = useRef(null);
 
-    async function getData(numHours) {
+    async function getData(yr, mo, da, hr) {
+      console.log("getting data")
       try {
+        chart.showLoading();
           var response;
           var timestampArr = [];
           var bxArr = [];
           var byArr = [];
           var bzArr = [];
-          for (let j = 1; j <= numHours; j++) {
-            response = await Axios.get(`http://localhost:8081/getlivegclouddata/${j}`);
+            response = await Axios.get(`http://localhost:8081/getlivegclouddata/0/${yr}/${mo}/${da}/${hr}`);
             console.log(response.data);
             timestampArr.unshift(...response.data.map(entry => parseFloat(entry.timestamp) * 1000)); //s to ms
-                                                                                              //TODO: times are currently relative
+                                                                                                //TODO: times are currently relative
             bxArr.unshift(...response.data.map((entry, i) => [timestampArr[i], parseFloat(entry.nT1)])); //convert from string to float
             byArr.unshift(...response.data.map((entry, i) => [timestampArr[i], parseFloat(entry.nT2)]));
             bzArr.unshift(...response.data.map((entry, i) => [timestampArr[i], parseFloat(entry.nT3)]));
-          }
 
           // console.log(bxArr);
           // console.log("by" + bxArr);
@@ -81,14 +85,15 @@ const TestGraph = () => {
       }
     }
 
-    useEffect(() => {
+    const onDateSelect = () => {
       chart = chartComponent.current.chart;
       chart.showLoading();
-      getData(hoursToDisplay);
+      getData(year, month, day, hour);
       chart.series[0].hide();
       chart.series[1].hide();
       chart.series[2].hide();
-    }, [hoursToDisplay]);
+      setTabValue(null);
+    };
 
     // //Sets the appropiate starting date for the first load
     // useEffect(() => {
@@ -271,11 +276,39 @@ const TestGraph = () => {
         <Tab label='By' value='2'/>
         <Tab label='Bz' value='3'/>
       </Tabs>
-      <Tabs onChange={handleChange} value={currTabValue}>
-        <Tab label='1 hour' value='4'/>
-        <Tab label='2 hours' value='5'/>
-        <Tab label='5 hours' value='6'/>
-      </Tabs>
+      <TextField
+        id="outlined-controlled"
+        label="Year"
+        value={year}
+        onChange={(event) => {
+            setYear(event.target.value);
+        }}
+    />
+    <TextField
+        id="outlined-controlled"
+        label="Month"
+        value={month}
+        onChange={(event) => {
+            setMonth(event.target.value);
+        }}
+    />
+    <TextField
+        id="outlined-controlled"
+        label="Day"
+        value={day}
+        onChange={(event) => {
+            setDay(event.target.value);
+        }}
+    />
+    <TextField
+        id="outlined-controlled"
+        label="Hour"
+        value={hour}
+        onChange={(event) => {
+            setHour(event.target.value);
+        }}
+    />
+    <Button title="Submit" onClick={() => onDateSelect()}>Submit</Button>
       <HighchartsReact
         ref={chartComponent}
         highcharts={Highcharts}
@@ -287,4 +320,4 @@ const TestGraph = () => {
 
 };
 
-export default TestGraph;
+export default TestHistoricalGraph;

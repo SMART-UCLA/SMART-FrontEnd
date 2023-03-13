@@ -6,6 +6,7 @@ import Home  from './components/Home';
 import GraphDay from './components/GraphDay';
 import LiveData from './components/LiveData';
 import TestGraph from './components/TestGraph'
+import TestHistoricalGraph from './components/TestHistoricalGraph';
 
 
 function App() {
@@ -15,6 +16,10 @@ function App() {
             <Route exact path ="/" element={<Home />}/>
             <Route exact path = "/TestGraph" element ={
               <TestGraph/>
+            }
+            />
+            <Route exact path = "/TestHistoricalGraph" element ={
+              <TestHistoricalGraph/>
             }
             />
             <Route exact path = "/HistoricalData" element={
