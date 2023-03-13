@@ -1,0 +1,14 @@
+gs://smart-323315.appspot.com/
+gs://smart-station-amer/
+gs://smart-station-ccnv/
+gs://smart-station-glyn/
+gs://smart-station-hris/
+gs://smart-station-ndev/
+gs://smart-station-ptrs/
+gs://smart-station-rmus/
+gs://smart-station-satx/
+gs://smart-station-swno/
+gs://smart-station-tble/
+gs://smart-station-test/
+gs://smart-station-wrth/
+gs://staging.smart-323315.appspot.com/
