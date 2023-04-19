@@ -1,17 +1,27 @@
 import logo from './logo.svg';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'; /*needed to change from Switch to Routes and change overall structure*/
+import { BrowserRouter, HashRouter, Routes, Route } from 'react-router-dom'; /*needed to change from Switch to Routes and change overall structure*/
 import './App.css';
 
 import Home  from './components/Home';
 import GraphDay from './components/GraphDay';
 import LiveData from './components/LiveData';
+import TestGraph from './components/TestGraph'
+import TestHistoricalGraph from './components/TestHistoricalGraph';
 
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
         <Routes> 
             <Route exact path ="/" element={<Home />}/>
+            <Route exact path = "/TestGraph" element ={
+              <TestGraph/>
+            }
+            />
+            <Route exact path = "/TestHistoricalGraph" element ={
+              <TestHistoricalGraph/>
+            }
+            />
             <Route exact path = "/HistoricalData" element={
               <GraphDay
                 table={"apollo15int"}
@@ -29,7 +39,7 @@ function App() {
               />}
             />
         </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
