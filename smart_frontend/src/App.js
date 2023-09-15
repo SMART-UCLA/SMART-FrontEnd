@@ -5,6 +5,7 @@ import './App.css';
 import Home  from './components/Home';
 import GraphDay from './components/GraphDay';
 import LiveData from './components/LiveData';
+import LiveDataMQTT from './components/LiveDataMQTT'
 import TestGraph from './components/TestGraph'
 import TestHistoricalGraph from './components/TestHistoricalGraph';
 
@@ -20,6 +21,10 @@ function App() {
             />
             <Route exact path = "/TestHistoricalGraph" element ={
               <TestHistoricalGraph/>
+            }
+            />
+             <Route exact path = "/LiveDataMQTT" element ={
+              <LiveDataMQTT/>
             }
             />
             <Route exact path = "/HistoricalData" element={
