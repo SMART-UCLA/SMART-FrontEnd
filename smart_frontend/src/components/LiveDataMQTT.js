@@ -28,6 +28,7 @@ const LiveDataMQTT = (props) => {
   const topicToSampleRef = useRef(topicToSample);
   topicToSampleRef.current = topicToSample;
   const currTopic = useRef(null);
+  const topicChanged = useRef(false);
 
 
   const chartComponent = useRef(null);
@@ -36,6 +37,13 @@ const LiveDataMQTT = (props) => {
     console.log("requesting data");
     // console.log(topicToSampleRef.current);
       try {
+          let chart = chartComponent?.current?.chart; 
+          if (topicChanged.current) {
+            topicChanged.current = false;
+            chart.series[0].setData([]);
+            chart.series[1].setData([]);
+            chart.series[2].setData([]);
+          }
           if (topicToSampleRef.current) {
             console.log(topicToSampleRef.current)
         //   const callData = { table, year, month, day, hour, minute, second }; //need to add minute
@@ -47,14 +55,14 @@ const LiveDataMQTT = (props) => {
             const zPoint = [currTime, response.data.z];
             console.log("response: " + JSON.stringify(response));
   
-            let chart = chartComponent.current.chart; 
             const shift = chart.series[0].data.length > 100;
-  
             if (currTime !== undefined && (chart.series[0].data.length === 0 || !(currTime === chart.series[0].points.slice(-1)[0].x))) {
                 chart.series[0].addPoint(xPoint, true, shift);
                 chart.series[1].addPoint(yPoint, true, shift);
                 chart.series[2].addPoint(zPoint, true, shift);
             }
+
+            console.log(chart.series[0].points)
           }
 
           setTimeout(requestData, 1000);
@@ -199,10 +207,18 @@ const LiveDataMQTT = (props) => {
 
 const handleSubmit = (event) => {
   event.preventDefault();
+  let chart = chartComponent.current.chart; 
+  // while(chart.series.length > 0){
+  //   chart.series[0].remove(true);
+  //   chart.series[1].remove(true);
+  //   chart.series[2].remove(true);
+  // }
+  topicChanged.current = true;
   console.log("submitted")
   // setTopic(topic.current.value);
   setSampleTopic(currTopic.current.value.slice());
   console.log(topicToSample);
+
 }
 
     return (
