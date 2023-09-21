@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {Tabs, Tab} from '@mui/material'
+import {Tabs, Tab, TextField} from '@mui/material'
 import { render } from 'react-dom';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
@@ -23,35 +23,43 @@ const LiveDataMQTT = (props) => {
   const [lastDate, setLastDate] = useState(new Date(props.startingDate));
   const [noDataMsg, setNoDataMsg] = useState("Awaiting data");
   const [currTabValue, setTabValue] = useState(null);
+  // const [currTopic, setTopic] = useState(null);
+  const [topicToSample, setSampleTopic] = useState(null);
+  const topicToSampleRef = useRef(topicToSample);
+  topicToSampleRef.current = topicToSample;
+  const currTopic = useRef(null);
 
 
   const chartComponent = useRef(null);
 
   async function requestData() {
     console.log("requesting data");
+    // console.log(topicToSampleRef.current);
       try {
+          if (topicToSampleRef.current) {
+            console.log(topicToSampleRef.current)
         //   const callData = { table, year, month, day, hour, minute, second }; //need to add minute
-          await Axios.get("http://localhost:8080/getlivedata").then((response) => {
+            const response = await Axios.get(`http://localhost:8080/getlivedata/${topicToSampleRef.current}`);
             const currTime = response.data.t ? response.data.t * 1000 : undefined;
             console.log(currTime);
             const xPoint = [currTime, response.data.x];
             const yPoint = [currTime, response.data.y];
             const zPoint = [currTime, response.data.z];
             console.log("response: " + JSON.stringify(response));
-
+  
             let chart = chartComponent.current.chart; 
             const shift = chart.series[0].data.length > 100;
-
+  
             if (currTime !== undefined && (chart.series[0].data.length === 0 || !(currTime === chart.series[0].points.slice(-1)[0].x))) {
                 chart.series[0].addPoint(xPoint, true, shift);
                 chart.series[1].addPoint(yPoint, true, shift);
                 chart.series[2].addPoint(zPoint, true, shift);
             }
-
-            setTimeout(requestData, 1000);
-
-          })
           }
+
+          setTimeout(requestData, 1000);
+
+        }
         catch (err) {
           console.log("ERROR");
           console.log(err.message);
@@ -189,6 +197,14 @@ const LiveDataMQTT = (props) => {
     setTabValue(value);
 }
 
+const handleSubmit = (event) => {
+  event.preventDefault();
+  console.log("submitted")
+  // setTopic(topic.current.value);
+  setSampleTopic(currTopic.current.value.slice());
+  console.log(topicToSample);
+}
+
     return (
     <div style={{position: 'relative'}}>
         <Tabs onChange={handleChange} value={currTabValue}>
@@ -196,7 +212,11 @@ const LiveDataMQTT = (props) => {
             <Tab label='By' value='2'/>
             <Tab label='Bz' value='3'/>
         </Tabs>
-
+        <form onSubmit={handleSubmit}>
+          {/* <TextField onChange={e => setTopic(e.target.value)} value={currTopic}/> */}
+          <TextField inputRef={currTopic}/>
+        </form>
+        <text>Current Topic: {topicToSample}</text>
         <HighchartsReact
         ref={chartComponent}
         highcharts={Highcharts}
