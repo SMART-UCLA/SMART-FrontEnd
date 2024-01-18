@@ -74,21 +74,25 @@ const LiveDataMQTT = (props) => {
       // const xPoint = [currTime, dp.x];
       // const yPoint = [currTime, dp.y];
       // const zPoint = [currTime, dp.z];
-      addPoint(dp, false);
+      if (response.data.length > 500) {
+        addPoint(dp, false, true)
+      } else {
+        addPoint(dp, false, false);
+      }
     }
     chart.redraw();
     console.log("bruh")
     await requestData();
   }
 
-  function addPoint(data, redraw) {
+  function addPoint(data, redraw, shift) {
+    shift = false //disable shifting for now, data will persist even for higher resolutions
     console.log(data)
     // let chart = chartComponent?.current?.chart; 
     const currTime = data.t ? data.t * 1000 : undefined;
     const xPoint = [currTime, data.x];
     const yPoint = [currTime, data.y];
     const zPoint = [currTime, data.z];
-    const shift = chart.series[0].data.length > 500;
     chart.series[0].addPoint(xPoint, redraw, shift);
     chart.series[1].addPoint(yPoint, redraw, shift);
     chart.series[2].addPoint(zPoint, redraw, shift);
@@ -102,6 +106,7 @@ const LiveDataMQTT = (props) => {
       chart.series[4].addPoint(yAvg, redraw, shift);
       chart.series[5].addPoint(zAvg, redraw, shift);
     }
+    // dp_added++;
         // console.log(chart.series[3].points);
         // console.log(chart.series[4].points);
         // console.log(chart.series[5].points);
@@ -135,8 +140,9 @@ const LiveDataMQTT = (props) => {
             // const shift = chart.series[0].data.length > 100;
             // console.log(chart.series[0].points);
             if (currTime !== undefined && (chart.series[0].points.length === 0 || !(currTime === chart.series[0].points.slice(-1)[0].x))) {
+              const shift = chart.series[0].data.length > 500;
 
-              addPoint(response.data, true);
+              addPoint(response.data, true, shift);
             }
             // console.log(xAvg, yAvg, zAvg);
 
@@ -170,6 +176,19 @@ const LiveDataMQTT = (props) => {
       useGPUTranslations: true
     },
     xAxis: {
+      events: {
+        setExtremes: function(e) {
+            var maxDistance = granularity === "s" ? 100 * 1000 : granularity === "m" ? 6000 * 1000 : granularity === "10m" ? 60000 * 1000 : 360000 * 1000
+            var xaxis = this;
+            if ((e.max - e.min) > maxDistance) {
+                var min = e.max - maxDistance;
+                var max = e.max;
+                window.setTimeout(function() {
+                    xaxis.setExtremes(min, max);
+                }, 1);
+            }
+        }
+      },
       type: 'datetime',
     },
     time: {
@@ -270,7 +289,7 @@ const LiveDataMQTT = (props) => {
     ],
     rangeSelector: {
         inputEnabled: true,
-        selected: granularity === "s" ? 6 : 4,
+        selected: granularity === "s" ? 6 : granularity === "m" ? 4 : granularity === "10m" ? 3 : 2,
         buttons: [
           {
             type: 'all',
@@ -296,10 +315,10 @@ const LiveDataMQTT = (props) => {
             title: 'View 1 hour'
           },
           {
-          type: 'minute',
-          count: 10,
-          text: '10m',
-          title: 'View 10 minutes'
+            type: 'minute',
+            count: 10,
+            text: '10m',
+            title: 'View 10 minutes'
           },
           {
             type: 'minute',
@@ -386,7 +405,8 @@ const handleSubmit = (event) => {
 }
 
     return (
-    <div style={{position: 'relative'}}>
+    <div style={{justifyContent: "center", display: "flex"}}>
+    <div style={{position: 'relative', width: '96%', border: "1.99px solid black"}}>
         <Grid container>
           <Grid container xs={6}>
             <Grid item xs={12}  style={{textAlign: "center"}}>
@@ -403,7 +423,7 @@ const handleSubmit = (event) => {
            </Grid> 
           <Grid container xs={6}>
             <Grid item xs={12}  style={{textAlign: "center"}}>
-              <text>Granularity (currently {granularity == "s" ? "1 second" : granularity == "m" ? "1 minute" : granularity == "10m" ? "10 minutes" : "1 hour"}):</text>
+              <text>Granularity (currently {granularity == "s" ? "1 second" : granularity == "m" ? "1 minute" : granularity == "10m" ? "10 minutes" : "1 hour"}, max range of data shown = {granularity == "s" ? "100 seconds" : granularity == "m" ? "100 minutes" : granularity == "10m" ? "1000 minutes" : "100 hours"}):</text>
             </Grid>
             <Grid item xs={12}  style={{textAlign: "center"}}>
               <Button title="1 second" onClick={() => {navigate(`/LiveDataMQTT/${topic}/s`); window.location.reload();}}>1 second</Button>
@@ -424,6 +444,7 @@ const handleSubmit = (event) => {
         constructorType={'stockChart'}
         options={options}
         />
+    </div>
     </div>
     );
 
