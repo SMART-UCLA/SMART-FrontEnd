@@ -17,15 +17,19 @@ function App() {
       <AuthProvider>
         <Routes> 
             <Route exact path ="/" element={<Home />}/>
-            <Route exact path = "/TestGraph" element ={
+            {/* <Route exact path = "/TestGraph" element ={
               <TestGraph/>
             }
             />
             <Route exact path = "/TestHistoricalGraph" element ={
               <TestHistoricalGraph/>
             }
+            /> */}
+            <Route exact path = "/LiveDataMQTT/:topic/:granularity" element ={
+              <LiveDataMQTT/>
+            }
             />
-             <Route exact path = "/LiveDataMQTT" element ={
+            {/* <Route exact path = "/LiveDataMQTT/:topic" element ={
               <LiveDataMQTT/>
             }
             />
@@ -44,7 +48,7 @@ function App() {
                 startingDate={'1971-8-01 11:00:00 PST'}
                 maxDate={'1972-09-20 PST'}
               />}
-            />
+            /> */}
         </Routes>
         </AuthProvider>
     </HashRouter>
