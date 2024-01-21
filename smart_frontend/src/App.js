@@ -50,7 +50,7 @@ function App() {
               />}
             /> */}
         </Routes>
-        </AuthProvider>
+      </AuthProvider>
     </HashRouter>
   );
 }
