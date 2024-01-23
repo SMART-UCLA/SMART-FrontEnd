@@ -8,11 +8,13 @@ import LiveData from './components/LiveData';
 import LiveDataMQTT from './components/LiveDataMQTT'
 import TestGraph from './components/TestGraph'
 import TestHistoricalGraph from './components/TestHistoricalGraph';
+import AuthProvider from './auth/authConfiguration';
 
 
 function App() {
   return (
     <HashRouter>
+      <AuthProvider>
         <Routes> 
             <Route exact path ="/" element={<Home />}/>
             {/* <Route exact path = "/TestGraph" element ={
@@ -48,6 +50,7 @@ function App() {
               />}
             /> */}
         </Routes>
+      </AuthProvider>
     </HashRouter>
   );
 }
