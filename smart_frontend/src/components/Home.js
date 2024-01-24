@@ -30,7 +30,7 @@ function Home() {
           >
             This site is a web display of all lunar magnetic field data collected from the Apollo 12, 15, and Apollo 16 missions. It is open to the general public, and all are welcome to use it for whatever purposes at no cost.
           </Box>
-          <button title="1 second" onClick={() => {navigate(`LiveDataMQTT/testTopic/s`); window.location.reload();}}>testTopic</button>
+          <button onClick={() => {navigate(`LiveDataMQTT/testTopic/s`);}}>testTopic</button>
           <button onClick={() => logout()}>
             log out
           </button>

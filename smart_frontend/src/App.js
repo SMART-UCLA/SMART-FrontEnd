@@ -19,43 +19,41 @@ function App() {
             <Route exact path ="/" element={<Home />}/>
             <Route 
               exact path = "/TestGraph" 
-              element ={<AuthGuard><TestGraph/></AuthGuard>}
+              element={<AuthGuard component={TestGraph} />}
             />
             <Route 
               exact path = "/TestHistoricalGraph" 
-              element ={ <AuthGuard><TestHistoricalGraph/></AuthGuard>}
+              element={<AuthGuard component={TestHistoricalGraph} />}
             />
             <Route
               exact path="/LiveDataMQTT/:topic/:granularity"
-              /*element={<AuthGuard><LiveDataMQTT /></AuthGuard>}*/
-              element={<LiveDataMQTT />} 
+              element={<AuthGuard component={LiveDataMQTT} />}
             />
             <Route 
               exact path = "/LiveDataMQTT/:topic" 
-              element={<AuthGuard><LiveDataMQTT/></AuthGuard>}
+              element={<AuthGuard component={LiveDataMQTT} />}
             />
-            <Route exact path = "/HistoricalData"
+            <Route 
+              exact path = "/HistoricalData"
               element={
-                <AuthGuard>
-                  <GraphDay
-                    table={"apollo15int"}
-                    title={"Magnetic Data 1971-8-01 to 1972-09-20"}
-                    startingDate={'1971-8-01 PST'}
-                    maxDate={'1972-09-20 PST'}
-                  />
-                </AuthGuard>
+                <AuthGuard
+                  component={GraphDay}
+                  table={"apollo15int"}
+                  title={"Magnetic Data 1971-8-01 to 1972-09-20"}
+                  startingDate={'1971-8-01 PST'}
+                  maxDate={'1972-09-20 PST'}
+                />
               }
             />
             <Route exact path = "/LiveData"
               element={
-                <AuthGuard>
-                  <LiveData
-                    table={"apollo15int"}
-                    title={"Live Data"}
-                    startingDate={'1971-8-01 11:00:00 PST'}
-                    maxDate={'1972-09-20 PST'}
-                  />
-                </AuthGuard>
+                <AuthGuard
+                  component={LiveData}
+                  table={"apollo15int"}
+                  title={"Live Data"}
+                  startingDate={'1971-8-01 11:00:00 PST'}
+                  maxDate={'1972-09-20 PST'}
+                />
               }
             /> 
         </Routes>
