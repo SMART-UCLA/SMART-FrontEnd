@@ -4,13 +4,20 @@ import Box from '@mui/material/Box';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
+import Navbar from './Navbar';
 
 function Home() {
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
   const navigate = useNavigate();
 
+  const handleButtonClick = () => {
+    // Use navigate to navigate to the "/LiveDataMQTT" route
+    navigate('/LiveDataMQTT');
+  };
+
   return (
     <div style={{ textAlign: 'center' }}>
+      <Navbar></Navbar>
       <h1>Welcome to SMART</h1>
       {isAuthenticated ? (
         <div style={{ width: '50%', margin: 'auto' }}>
@@ -53,6 +60,12 @@ function Home() {
       >
         <img src={smartImg} width="75%" height="60%" alt="SMART Image" />
       </span>
+      <button
+            onClick={handleButtonClick}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none"
+          >
+            Click me to navigate to MQTT
+          </button>
     </div>
   );
 }

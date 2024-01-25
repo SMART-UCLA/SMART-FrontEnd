@@ -1,6 +1,5 @@
 import logo from './logo.svg';
 import { BrowserRouter, HashRouter, Routes, Route } from 'react-router-dom'; /*needed to change from Switch to Routes and change overall structure*/
-import './App.css';
 
 import Home  from './components/Home';
 import GraphDay from './components/GraphDay';
@@ -13,6 +12,7 @@ import AuthGuard from './auth/authGuard';
 
 function App() {
   return (
+    <div class="mt-24">
     <HashRouter>
       <AuthProvider>
         <Routes> 
@@ -59,6 +59,7 @@ function App() {
         </Routes>
       </AuthProvider>
     </HashRouter>
+    </div>
   );
 }
 
