@@ -13,6 +13,7 @@ import TestHistoricalGraph from './components/TestHistoricalGraph';
 
 function App() {
   return (
+    <div style={{ paddingTop: '100px' }}> {/* Adjust the value based on your Navbar height */}
     <HashRouter>
         <Routes> 
             <Route exact path ="/" element={<Home />}/>
@@ -46,6 +47,7 @@ function App() {
             />
         </Routes>
     </HashRouter>
+    </div>
   );
 }
 

@@ -7,6 +7,8 @@ import Boost from 'highcharts/modules/boost';
 import Axios from 'axios';
 import DatePicker from "react-datepicker"; 
 import "react-datepicker/dist/react-datepicker.css";
+import Navbar from './Navbar';  // Import the Navbar component
+
 
 // import "./customDatePicker.css";
 import noDataToDisplay from 'highcharts/modules/no-data-to-display';
@@ -191,6 +193,7 @@ const LiveDataMQTT = (props) => {
 
     return (
     <div style={{position: 'relative'}}>
+      <Navbar />
         <Tabs onChange={handleChange} value={currTabValue}>
             <Tab label='Bx' value='1'/>
             <Tab label='By' value='2'/>
