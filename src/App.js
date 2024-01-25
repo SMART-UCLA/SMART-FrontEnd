@@ -12,7 +12,7 @@ import AuthGuard from './auth/authGuard';
 
 function App() {
   return (
-    <div class="mt-24">
+    <div className="mt-24">
     <HashRouter>
       <AuthProvider>
         <Routes> 
