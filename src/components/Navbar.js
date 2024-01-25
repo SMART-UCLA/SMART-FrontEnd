@@ -7,7 +7,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 const Navbar = () => {
   const navigate = useNavigate();
 
-  const { logout } = useAuth0();
+  const { isAuthenticated ,logout , loginWithRedirect } = useAuth0();
 
   const handleNavLinkClick = (path) => {
     navigate(path);
@@ -33,9 +33,16 @@ const Navbar = () => {
           <a href="#" className="text-black" onClick={() => handleNavLinkClick('/contact')}>
             Contact
           </a>
-          <a href="#" className="text-black" onClick={() => logout()}>
-            Logout
-          </a>
+          {isAuthenticated ? (
+            <a href="#" className="text-black" onClick={() => logout()}>
+              Logout
+            </a>
+          ) : (
+            <a href="#" className="text-black" onClick={() => loginWithRedirect()}>
+              Login
+            </a>
+          )}
+
         </div>
       </div>
     </nav>
@@ -43,3 +50,4 @@ const Navbar = () => {
 }
 
 export default Navbar;
+

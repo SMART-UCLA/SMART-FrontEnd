@@ -16,10 +16,10 @@ function Home() {
 
   return (
     <div style={{ textAlign: 'center' }}>
+      <Navbar></Navbar>
       <h1>Welcome to SMART</h1>
       {isAuthenticated ? (
         <div stype={{ textAlign: 'center'}}>
-          <Navbar></Navbar>
           <div style={{ width: '50%', margin: 'auto' }}>
             <Box
               sx={{
