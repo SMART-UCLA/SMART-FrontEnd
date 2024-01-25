@@ -10,6 +10,8 @@ const AuthProvider = ({ children }) => {
         domain={domain}
         clientId={clientId}
         authorizationParams={{ redirect_uri: redirectUri }}
+        useRefreshTokens={true}
+        cacheLocation="localstorage"
       >
         {children}
       </Auth0Provider>
