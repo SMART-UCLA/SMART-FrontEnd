@@ -1,4 +1,4 @@
-import { Auth0Provider } from '@auth0/auth0-react';
+import { Auth0Provider, useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 
 const AuthProvider = ({ children }) => {
     const domain = 'dev-xdx10w8664v1a2yz.us.auth0.com';
@@ -14,6 +14,6 @@ const AuthProvider = ({ children }) => {
         {children}
       </Auth0Provider>
     );
-  };
+};
   
 export default AuthProvider;
