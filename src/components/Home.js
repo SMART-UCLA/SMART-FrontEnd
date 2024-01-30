@@ -12,12 +12,11 @@ function Home() {
 
   const handleButtonClick = () => {
     // Use navigate to navigate to the "/LiveDataMQTT" route
-    navigate('/LiveDataMQTT');
+    navigate('LiveDataMQTT/testTopic/s');
   };
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <Navbar></Navbar>
       <h1>Welcome to SMART</h1>
       {isAuthenticated ? (
         <div style={{ width: '50%', margin: 'auto' }}>
@@ -37,18 +36,16 @@ function Home() {
           >
             This site is a web display of all lunar magnetic field data collected from the Apollo 12, 15, and Apollo 16 missions. It is open to the general public, and all are welcome to use it for whatever purposes at no cost.
           </Box>
-          <button onClick={() => {navigate(`LiveDataMQTT/testTopic/s`);}}>testTopic</button>
-          <button onClick={() => logout()}>
-            log out
+          <button
+            onClick={handleButtonClick}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none"
+          >
+            Click me to navigate to MQTT
           </button>
         </div>
       ) : (
         <p>
-          Please{' '}
-          <button onClick={() => loginWithRedirect()}>
-            log in
-          </button>{' '}
-          to access the content.
+          Please log in to access the content.
         </p>
       )}
       <span
@@ -58,14 +55,8 @@ function Home() {
           marginBottom: '20px',
         }}
       >
-        <img src={smartImg} width="75%" height="60%" alt="SMART Image" />
+        <img src={smartImg} width="75%" height="60%" alt="SMART Image" class="mx-auto" />
       </span>
-      <button
-            onClick={handleButtonClick}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none"
-          >
-            Click me to navigate to MQTT
-          </button>
     </div>
   );
 }

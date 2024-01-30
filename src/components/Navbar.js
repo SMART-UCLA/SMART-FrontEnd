@@ -2,8 +2,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import smartLogo from './logo.png';
+import { useAuth0 } from '@auth0/auth0-react';
+
 
 const Navbar = () => {
+  const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
   const navigate = useNavigate();
 
   const handleNavLinkClick = (path) => {
@@ -24,12 +27,18 @@ const Navbar = () => {
           <a href="#" className="text-black" onClick={() => handleNavLinkClick('/about')}>
             About
           </a>
-          <a href="#/LiveDataMQTT/testTopic/s" className="text-black">
-            MQTT
-          </a>
           <a href="#" className="text-black" onClick={() => handleNavLinkClick('/contact')}>
             Contact
           </a>
+          {isAuthenticated ? (
+          <button onClick={() => logout()}>
+            Logout
+          </button>
+      ) : (
+          <button onClick={() => loginWithRedirect()}>
+            Login
+          </button>
+      )}
         </div>
       </div>
     </nav>
