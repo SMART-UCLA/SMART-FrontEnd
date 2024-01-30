@@ -4,10 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import smartLogo from './logo.png';
 import { useAuth0 } from '@auth0/auth0-react';
 
-
 const Navbar = () => {
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
   const navigate = useNavigate();
+
+  const { isAuthenticated ,logout , loginWithRedirect } = useAuth0();
 
   const handleNavLinkClick = (path) => {
     navigate(path);
@@ -31,6 +32,7 @@ const Navbar = () => {
             Contact
           </a>
           {isAuthenticated ? (
+
           <button onClick={() => logout()}>
             Logout
           </button>
@@ -46,3 +48,4 @@ const Navbar = () => {
 }
 
 export default Navbar;
+

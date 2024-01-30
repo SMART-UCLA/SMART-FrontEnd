@@ -2,7 +2,6 @@ import React  from 'react';
 import smartImg from './smart.png';
 import Box from '@mui/material/Box';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import Navbar from './Navbar';
 
@@ -55,7 +54,9 @@ function Home() {
           marginBottom: '20px',
         }}
       >
+
         <img src={smartImg} width="75%" height="60%" alt="SMART Image" class="mx-auto" />
+
       </span>
     </div>
   );
