@@ -5,6 +5,7 @@ import smartLogo from './logo.png';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const Navbar = () => {
+  const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
   const navigate = useNavigate();
 
   const { isAuthenticated ,logout , loginWithRedirect } = useAuth0();
@@ -27,22 +28,19 @@ const Navbar = () => {
           <a href="#" className="text-black" onClick={() => handleNavLinkClick('/about')}>
             About
           </a>
-          <a href="#/LiveDataMQTT/testTopic/s" className="text-black">
-            MQTT
-          </a>
           <a href="#" className="text-black" onClick={() => handleNavLinkClick('/contact')}>
             Contact
           </a>
           {isAuthenticated ? (
-            <a href="#" className="text-black" onClick={() => logout()}>
-              Logout
-            </a>
-          ) : (
-            <a href="#" className="text-black" onClick={() => loginWithRedirect()}>
-              Login
-            </a>
-          )}
 
+          <button onClick={() => logout()}>
+            Logout
+          </button>
+      ) : (
+          <button onClick={() => loginWithRedirect()}>
+            Login
+          </button>
+      )}
         </div>
       </div>
     </nav>
