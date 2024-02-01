@@ -9,6 +9,7 @@ import TestHistoricalGraph from './components/TestHistoricalGraph';
 import AuthProvider from './auth/authConfiguration';
 import AuthGuard from './auth/authGuard';
 import Navbar from './components/Navbar';
+import Stations from './components/Stations';
 
 function App() {
   return (
@@ -20,6 +21,11 @@ function App() {
             <Route exact path ="/" element={<Home />}/>
             <Route 
               exact path = "/TestGraph" 
+              element={<AuthGuard component={TestGraph} />}
+            />
+            <Route exact path ="/stations" element={<Stations />}/>
+            <Route 
+              exact path = "/stations" 
               element={<AuthGuard component={TestGraph} />}
             />
             <Route 

@@ -16,7 +16,7 @@ function Home() {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <h1>Welcome to SMART</h1>
+      <h1 className="text-4xl font-bold text-center mb-8">Welcome to SMART</h1>
       {isAuthenticated ? (
         <div style={{ width: '50%', margin: 'auto' }}>
           <Box
