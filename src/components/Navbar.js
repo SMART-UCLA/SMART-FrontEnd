@@ -8,8 +8,6 @@ const Navbar = () => {
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
   const navigate = useNavigate();
 
-  const { isAuthenticated ,logout , loginWithRedirect } = useAuth0();
-
   const handleNavLinkClick = (path) => {
     navigate(path);
   };
