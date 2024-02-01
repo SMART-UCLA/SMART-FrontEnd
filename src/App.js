@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import { BrowserRouter, HashRouter, Routes, Route } from 'react-router-dom'; /*needed to change from Switch to Routes and change overall structure*/
 
 import Home  from './components/Home';
@@ -9,16 +8,24 @@ import TestGraph from './components/TestGraph'
 import TestHistoricalGraph from './components/TestHistoricalGraph';
 import AuthProvider from './auth/authConfiguration';
 import AuthGuard from './auth/authGuard';
+import Navbar from './components/Navbar';
+import Stations from './components/Stations';
 
 function App() {
   return (
     <div className="mt-24">
     <HashRouter>
       <AuthProvider>
+        <Navbar></Navbar>
         <Routes> 
             <Route exact path ="/" element={<Home />}/>
             <Route 
               exact path = "/TestGraph" 
+              element={<AuthGuard component={TestGraph} />}
+            />
+            <Route exact path ="/stations" element={<Stations />}/>
+            <Route 
+              exact path = "/stations" 
               element={<AuthGuard component={TestGraph} />}
             />
             <Route 
