@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from "react-router-dom";
 import Navbar from './Navbar';
+import Profile from './Profile';
 
 function Home() {
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
@@ -37,6 +38,7 @@ function Home() {
             >
               This site is a web display of all lunar magnetic field data collected from the Apollo 12, 15, and Apollo 16 missions. It is open to the general public, and all are welcome to use it for whatever purposes at no cost.
             </Box>
+            <Profile></Profile>
             <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none" onClick={() => {navigate(`LiveDataMQTT/testTopic/s`);}}>testTopic</button>
             <button
               onClick={handleButtonClick}
