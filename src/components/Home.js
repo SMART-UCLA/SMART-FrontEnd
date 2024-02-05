@@ -52,7 +52,7 @@ function Home() {
         }}
       >
 
-        <img src={smartImg} width="75%" height="60%" alt="SMART Image" class="mx-auto" />
+        <img src={smartImg} width="75%" height="60%" alt="SMART Image" className="mx-auto" />
 
       </span>
     </div>
