@@ -3,9 +3,11 @@ import { useAuth0 } from '@auth0/auth0-react';
 
 const Profile = () => {
   const { user, getAccessTokenSilently } = useAuth0();
-  const[userMetadata, setUserMetadata] = useState(null);
+  const [userMetadata, setUserMetadata] = useState(null);
   const domain = "dev-xdx10w8664v1a2yz.us.auth0.com";
-  const { name, picture } = user;
+  const [userName, setUserName] = useState("");
+  const [userPicture, setUserPicture] = useState("");
+  const [selectedStation, setSelectedStation] = useState("");
 
   const getUserMetadata = async () => {
     try {
@@ -26,6 +28,10 @@ const Profile = () => {
       const responseData = await metadataResponse.json();
       const userMetadata = responseData.user_metadata;
       setUserMetadata(userMetadata);
+      const userName = responseData.name;
+      setUserName(userName);
+      const userPicture = responseData.picture;
+      setUserPicture(userPicture);
     } catch (e) {
       console.log(e.message);
     }
@@ -33,7 +39,9 @@ const Profile = () => {
 
   useEffect(() => {
     getUserMetadata();
+
   }, [getAccessTokenSilently, user?.sub]);
+
 
   const updateStationNumber = async (newStationNumber) => {
     try {
@@ -67,34 +75,45 @@ const Profile = () => {
       console.log(e);
     }
   }
+  
+  const handleStationChange = (e) => {
+    setSelectedStation(e.target.value);
+  }
 
   return (
-      <div>
-          <div className="row align-items-center profile-header">
-              <div className="col-md-2 mb-3">
-                  <img
-                      src={picture}
-                      alt="Profile"
-                      className="rounded-circle img-fluid profile-picture mb-3 mb-md-0"
-                  />
-              </div>
-              <div className="col-md text-center text-md-left">
-                  <h2>{name}</h2>
-              </div>
-          </div>
-          <div className="row">
-              <div className="col-md-6 offset-md-3">
-              {userMetadata ? (
-                  <pre>{userMetadata.station_number}</pre>
-                ) : (
-                  "No user metadata defined"
-                )}
-              </div>
-              <div>
-                <button onClick={() => updateStationNumber("updated station number")}>Update Click Here</button>
-              </div>
-          </div>
-      </div>
+    <div>
+        <div className="row align-items-center profile-header">
+            <div className="col-md-2 mb-3">
+                <img
+                    src={userPicture}
+                    alt="Profile"
+                    className="rounded-circle img-fluid profile-picture mb-3 mb-md-0"
+                />
+            </div>
+            <div className="col-md text-center text-md-left">
+                <h2>{userName}</h2>
+            </div>
+        </div>
+        <div className="row">
+            <div className="col-md-6 offset-md-3">
+            {userMetadata ? (
+                <pre>{userMetadata.station_number}</pre>
+              ) : (
+                "No user metadata defined"
+              )}
+            </div>
+            <div>
+              <select value={selectedStation} onChange={handleStationChange}>
+                <option value="">Select Station Number</option>
+                {[...Array(15).keys()].map((station) => (
+                  <option key={station} value={station}>{station}</option>
+                ))}
+              </select>
+              <button onClick={() => updateStationNumber(selectedStation)}>Update Station Number</button>
+  
+            </div>
+        </div>
+    </div>
   );
 };
 
