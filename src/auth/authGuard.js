@@ -6,24 +6,26 @@ import Home from "../components/Home";
 import { Navigate } from "react-router-dom";
 
 const AuthGuard = ({ component: Component, ...args  }) => {
-  console.log('Component:', Component);
-  // const { isAuthenticated } = useAuth0();
-  const AuthenticatedComponent = withAuthenticationRequired(() => (
-    <Component {...args} />
-  ), {
-    onRedirecting: () => <Navigate to="/" />,
-  });
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        await getAccessTokenSilently();
+      } catch (e) {
+        console.log("Error getting access token", e);
+        navigate("/");
+      }
+    }; 
+    // When page refreshes, check auth status
+    if(!isAuthenticated) {
+      checkAuth();
+    }
+  }, [isAuthenticated, getAccessTokenSilently, navigate]);
 
-  /*
-  const AuthenticatedComponent = withAuthenticationRequired(Component, {
-    onRedirecting: () => (
-      <Navigate to="/"/>
-    ),
-  });
-  */
 
-  return <AuthenticatedComponent />;
-  //return isAuthenticated ? <AuthenticatedComponent /> : <Home/>
+  return isAuthenticated ? <Component {...args}></Component> : <Home/>
 };
 
 export default AuthGuard;
