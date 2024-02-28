@@ -426,10 +426,10 @@ const handleSubmit = (event) => {
               <text>Granularity (currently {granularity == "s" ? "1 second" : granularity == "m" ? "1 minute" : granularity == "10m" ? "10 minutes" : "1 hour"}, max range of data shown = {granularity == "s" ? "100 seconds" : granularity == "m" ? "100 minutes" : granularity == "10m" ? "1000 minutes" : "100 hours"}):</text>
             </Grid>
             <Grid item xs={12}  style={{textAlign: "center"}}>
-              <Button title="1 second" onClick={() => {navigate(`/LiveDataMQTT/${topic}/s`); }}>1 second</Button>
-              <Button title="1 minute" onClick={() => {navigate(`/LiveDataMQTT/${topic}/m`); }}>1 minute</Button>
-              <Button title="10 minutes" onClick={() => {navigate(`/LiveDataMQTT/${topic}/10m`); }}>10 minutes</Button>
-              <Button title="1 hour" onClick={() => {navigate(`/LiveDataMQTT/${topic}/h`); }}>1 hour</Button>
+              <Button title="1 second" onClick={() => {navigate(`/LiveDataMQTT/${topic}/s`); window.location.reload();}}>1 second</Button>
+              <Button title="1 minute" onClick={() => {navigate(`/LiveDataMQTT/${topic}/m`); window.location.reload();}}>1 minute</Button>
+              <Button title="10 minutes" onClick={() => {navigate(`/LiveDataMQTT/${topic}/10m`); window.location.reload();}}>10 minutes</Button>
+              <Button title="1 hour" onClick={() => {navigate(`/LiveDataMQTT/${topic}/h`); window.location.reload();}}>1 hour</Button>
             </Grid>
 
           </Grid>
