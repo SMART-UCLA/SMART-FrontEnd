@@ -1,4 +1,3 @@
-import React from "react";
 import {
   ComposableMap,
   Geographies,
@@ -6,31 +5,34 @@ import {
   Marker,
 } from "react-simple-maps";
 
+import React, { useState, useEffect } from "react";
+
 const geoUrl =
   "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
 const threeDayMag = [
-  { name: "Arkansas1", location: "Searcy, AR", coordinates: [-91.7, 35.2] },
-  { name: "Indiana1", location: "Kendallville, IN", coordinates: [-85.3, 41.4] },
-  { name: "New-hampshire1", location: "Lisbon, NH", coordinates: [-71.9, 44.2] },
-  { name: "Oklahoma1", location: "Jay, OK", coordinates: [-94.8, 36.4] },
-  { name: "Oklahoma2", location: "Broken Bow, OK", coordinates: [-94.7, 34.0] },
-  { name: "Texas1", location: "Palacios, TX", coordinates: [-96.3, 28.7] },
-  { name: "Arkansas2", location: "Ozark, AR", coordinates: [-93.8, 35.5] },
-  { name: "Indiana2", location: "Campbellsburg, IN", coordinates: [-86.3, 38.7] },
-  { name: "Maine1", location: "Madison, ME", coordinates: [-69.9, 44.8] },
-  { name: "New-york1", location: "Red Creek, NY", coordinates: [-76.7, 43.2] },
-  { name: "Maine2", location: "Bingham, ME", coordinates: [-69.9, 45.1] },
-  { name: "New-york2", location: "Andover, NY", coordinates: [-77.8, 42.2] },
-  { name: "Topic13", location: "Cleveland, OH", coordinates: [-81.7, 41.5] },
-  { name: "Topic14", location: "Urbana, IL", coordinates: [-88.2, 40.1] },
-  { name: "Topic15", location: "San Antonio, TX", coordinates: [-98.5, 29.4] },
-  { name: "Topic16", location: "Dardanelle, AR", coordinates: [-93.2, 35.2] },
-  { name: "Topic17", location: "Rangeley, ME", coordinates: [-70.6, 45.0] },
-  { name: "Topic18", location: "Columbus, IN", coordinates: [-85.9, 39.2] },
-  { name: "Topic19", location: "St. Louis, MO", coordinates: [-90.2, 38.6] },
-  { name: "Topic20", location: "Oxford, OH", coordinates: [-84.7, 39.5] },
+  { name: "Arkansas1", location: "Searcy, AR", coordinates: [-91.7, 35.2], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/arkansas1/m" },
+  { name: "Indiana1", location: "Kendallville, IN", coordinates: [-85.3, 41.4], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/indiana1/m" },
+  { name: "New-hampshire1", location: "Lisbon, NH", coordinates: [-71.9, 44.2], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/new-hampshire1/m" },
+  { name: "Oklahoma1", location: "Jay, OK", coordinates: [-94.8, 36.4], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/oklahoma1/m" },
+  { name: "Oklahoma2", location: "Broken Bow, OK", coordinates: [-94.7, 34.0], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/oklahoma2/m" },
+  { name: "Texas1", location: "Palacios, TX", coordinates: [-96.3, 28.7], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/texas1/m" },
+  { name: "Arkansas2", location: "Ozark, AR", coordinates: [-93.8, 35.5], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/arkansas2/m" },
+  { name: "Indiana2", location: "Campbellsburg, IN", coordinates: [-86.3, 38.7], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/indiana2/m" },
+  { name: "Maine1", location: "Madison, ME", coordinates: [-69.9, 44.8], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/maine1/m" },
+  { name: "New-york1", location: "Red Creek, NY", coordinates: [-76.7, 43.2], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/new-york1/m" },
+  { name: "Maine2", location: "Bingham, ME", coordinates: [-69.9, 45.1], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/maine2/m" },
+  { name: "New-york2", location: "Andover, NY", coordinates: [-77.8, 42.2], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/new-york2/m" },
+  { name: "Topic13", location: "Cleveland, OH", coordinates: [-81.7, 41.5], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic13/m" },
+  { name: "Topic14", location: "Urbana, IL", coordinates: [-88.2, 40.1], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic14/m" },
+  { name: "Topic15", location: "San Antonio, TX", coordinates: [-98.5, 29.4], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic15/m" },
+  { name: "Topic16", location: "Dardanelle, AR", coordinates: [-93.2, 35.2], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic16/m" },
+  { name: "Topic17", location: "Rangeley, ME", coordinates: [-70.6, 45.0], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic17/m" },
+  { name: "Topic18", location: "Columbus, IN", coordinates: [-85.9, 39.2], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic18/m" },
+  { name: "Topic19", location: "St. Louis, MO", coordinates: [-90.2, 38.6], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic19/m" },
+  { name: "Topic20", location: "Oxford, OH", coordinates: [-84.7, 39.5], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic20/m" },
 ];
+  
 
 const USGS = [
   { name: "BOU", coordinates: [-105.237, 40.137] },
@@ -51,6 +53,15 @@ const DASI = [
 ];
 
 const MapChart = () => {
+  const [hoveredPoint, setHoveredPoint] = useState(null);
+  const [markerClickUrl, setMarkerClickUrl] = useState(null);
+
+  useEffect(() => {
+    if (markerClickUrl) {
+      window.open(markerClickUrl, "_blank");
+      setMarkerClickUrl(null);
+    }
+  }, [markerClickUrl]);
   return (
     <div>
       <ComposableMap projection="geoAlbersUsa">
@@ -63,8 +74,14 @@ const MapChart = () => {
           )}
         </Geographies>
         {/* Render markers for threeDayMag */}
-        {threeDayMag.map(({ name, coordinates }) => (
-          <Marker key={name} coordinates={coordinates}>
+        {threeDayMag.map(({ name, location, coordinates, url }) => (
+          <Marker
+            key={name}
+            coordinates={coordinates}
+            onMouseEnter={() => setHoveredPoint({ name, location })}
+            onMouseLeave={() => setHoveredPoint(null)}
+            onClick={() => setMarkerClickUrl(url)}
+          >
             <circle r={10} fill="#008000" stroke="#fff" strokeWidth={2} />
           </Marker>
         ))}
@@ -81,6 +98,12 @@ const MapChart = () => {
           </Marker>
         ))}
       </ComposableMap>
+      {hoveredPoint && (
+      <div style={{ position: "absolute", backgroundColor: "white", padding: "10px", borderRadius: "5px", boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)" }}>
+        <h3>{hoveredPoint.name}</h3>
+        <p>{hoveredPoint.location}</p>
+      </div>
+      )}
       {/* Legend */}
       <div style={{ margin: "10px", textAlign: "center" }}>
         <div>
