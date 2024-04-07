@@ -68,6 +68,7 @@ const MapChart = () => {
     const fetchData = async () => {
       if (hoveredPoint) {
         try {
+          // TODO change get request to deployment url
           const response = await Axios.get(`http://localhost:8080/mqtt/get5-10minmovingAverages/${hoveredPoint.name.toLowerCase()}`);
           console.log(`http://localhost:8080/mqtt/get5-10minmovingAverages/${hoveredPoint.name.toLowerCase()}`)
           
