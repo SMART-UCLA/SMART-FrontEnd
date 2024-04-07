@@ -6,9 +6,9 @@ import {
 } from "react-simple-maps";
 
 import React, { useState, useEffect } from "react";
+import Axios from "axios";
 
-const geoUrl =
-  "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
+const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
 const threeDayMag = [
   { name: "Arkansas1", location: "Searcy, AR", coordinates: [-91.7, 35.2], url: "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/arkansas1/m" },
@@ -55,6 +55,7 @@ const DASI = [
 const MapChart = () => {
   const [hoveredPoint, setHoveredPoint] = useState(null);
   const [markerClickUrl, setMarkerClickUrl] = useState(null);
+  const [derivatives, setDerivatives] = useState([]);
 
   useEffect(() => {
     if (markerClickUrl) {
@@ -62,6 +63,26 @@ const MapChart = () => {
       setMarkerClickUrl(null);
     }
   }, [markerClickUrl]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (hoveredPoint) {
+        try {
+          const response = await Axios.get(`http://localhost:8080/mqtt/get5-10minmovingAverages/${hoveredPoint.name.toLowerCase()}`);
+          console.log(`http://localhost:8080/mqtt/get5-10minmovingAverages/${hoveredPoint.name.toLowerCase()}`)
+          
+          const derivatives = response.data;
+
+          setDerivatives(derivatives);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+    };
+  
+    fetchData();
+  }, [hoveredPoint]);
+  
   return (
     <div>
       <ComposableMap projection="geoAlbersUsa">
@@ -102,6 +123,19 @@ const MapChart = () => {
       <div style={{ position: "absolute", backgroundColor: "white", padding: "10px", borderRadius: "5px", boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)" }}>
         <h3>{hoveredPoint.name}</h3>
         <p>{hoveredPoint.location}</p>
+        {/* Displaying first derivatives */}
+        {derivatives.length > 0 && (
+          <>
+            <h4>First Derivatives</h4>
+              <span>X: {derivatives[0].firstDerivatives[0].x} ,</span>
+              <span> Y: {derivatives[0].firstDerivatives[1].y} ,</span>
+              <span> Z: {derivatives[0].firstDerivatives[2].z}</span>
+            <h4>Second Derivatives</h4>
+              <span>X: {derivatives[1].secondDerivatives[0].x} ,</span>
+              <span> Y: {derivatives[1].secondDerivatives[1].y} ,</span>
+              <span> Z: {derivatives[1].secondDerivatives[2].z}</span>
+          </>
+      )}
       </div>
       )}
       {/* Legend */}
