@@ -3,7 +3,7 @@ import { Auth0Provider, useAuth0, withAuthenticationRequired } from '@auth0/auth
 const AuthProvider = ({ children }) => {
     const domain = 'dev-xdx10w8664v1a2yz.us.auth0.com';
     const clientId = 'OVs6wasqgkibgaaY58XxY5bSlktODzhQ';
-    const redirectUri = 'http://localhost:3000/SMART-FrontEnd'
+    const redirectUri = 'https://justinsheu.github.io/SMART-FrontEnd'
     return (
       <Auth0Provider
         domain={domain}
