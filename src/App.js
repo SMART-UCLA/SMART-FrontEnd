@@ -15,31 +15,30 @@ function App() {
   return (
     <div className="mt-24">
     <HashRouter>
-      <AuthProvider>
+      
         <Navbar></Navbar>
         <Routes> 
             <Route exact path ="/" element={<Home />}/>
+            
             <Route 
               exact path = "/TestGraph" 
-              element={<AuthGuard component={TestGraph} />}
+              element={<TestGraph/>} 
             />
             <Route exact path ="/stations" element={<Stations />}/>
-            <Route 
-              exact path = "/stations" 
-              element={<AuthGuard component={TestGraph} />}
-            />
+            
             <Route 
               exact path = "/TestHistoricalGraph" 
-              element={<AuthGuard component={TestHistoricalGraph} />}
+              element={<TestHistoricalGraph/>}
             />
             <Route
               exact path="/LiveDataMQTT/:topic/:granularity"
-              element={<AuthGuard component={LiveDataMQTT} />}
+              element={<LiveDataMQTT/>}
             />
             <Route 
               exact path = "/LiveDataMQTT/:topic" 
-              element={<AuthGuard component={LiveDataMQTT} />}
+              element={<LiveDataMQTT/>}
             />
+            {/*
             <Route 
               exact path = "/HistoricalData"
               element={
@@ -63,8 +62,9 @@ function App() {
                 />
               }
             /> 
+             */}
         </Routes>
-      </AuthProvider>
+
     </HashRouter>
     </div>
   );
