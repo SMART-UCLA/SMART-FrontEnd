@@ -26,9 +26,9 @@ const Navbar = () => {
           </NavLink>
           {isAuthenticated ? (
             <>
-              <NavLink to="/LiveDataMQTT/testTopic/s" currentPath={location.pathname} onClick={() => handleNavLinkClick('/LiveDataMQTT/testTopic/s')}>
+              {/* <NavLink to="/LiveDataMQTT/testTopic/s" currentPath={location.pathname} onClick={() => handleNavLinkClick('/LiveDataMQTT/testTopic/s')}>
                 Live Data
-              </NavLink>
+              </NavLink> */}
               <button onClick={() => logout()}>Logout</button>
             </>
           ) : (
