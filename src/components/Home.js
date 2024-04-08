@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import smartImg from './smart.png';
 import Box from '@mui/material/Box';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -10,10 +10,34 @@ import MapChart from './MapChart';
 function Home() {
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
   const navigate = useNavigate();
+  const urls = [
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/arkansas1/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/indiana1/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/new-hampshire1/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/oklahoma1/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/oklahoma2/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/texas1/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/arkansas2/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/indiana2/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/maine1/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/new-york1/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/maine2/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/new-york2/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic13/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic14/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic15/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic16/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic17/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic18/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic19/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic20/m"
+  ];
+  const [selectedUrl, setSelectedUrl] = useState('');
 
-  const handleButtonClick = () => {
-    // Use navigate to navigate to the "/LiveDataMQTT" route
-    navigate('LiveDataMQTT/testTopic/s');
+  const handleDropdownChange = (event) => {
+    setSelectedUrl(event.target.value);
+    const url = event.target.value.split('#')[1]
+    navigate(url);
   };
 
   return (
@@ -41,6 +65,17 @@ function Home() {
             </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px' }}>
+                <div style={{ fontWeight: 'bold', textDecoration: 'underline', marginTop: '30px' }}>Select your station to view your graphical data</div>
+                <select onChange={handleDropdownChange} value={selectedUrl}>
+                  <option value="">Select a Station</option>
+                  {urls.map((url, index) => {
+                    const topic = url.split('/LiveDataMQTT/')[1].split('/')[0];
+                    return <option key={index} value={url}>{topic}</option>; // Use the topic as the option value
+                  })}
+              </select>
+
+            </div>
             <div style={{ width: '100%', maxWidth: '600px', margin: '10px' }}>
               <div style={{ fontWeight: 'bold', textDecoration: 'underline', marginTop: '30px' }}>X: First Derivative</div>
               <MapChart valueID={1}/>
