@@ -17,7 +17,7 @@ import noDataToDisplay from 'highcharts/modules/no-data-to-display';
 noDataToDisplay(Highcharts);
 Boost(Highcharts);
 const MOVING_AVG_COUNT = 5;
-const backend_endpoint = "https://smart-323315.uc.r.appspot.com"; //production endpoint
+const backend_endpoint = "http://35.188.59.177:8080"; //production endpoint
 // const backend_endpoint = "http://localhost:8080"; //dev endpoint
 
 const LiveDataMQTT = (props) => {
@@ -67,7 +67,7 @@ const LiveDataMQTT = (props) => {
     // while (!chart) {
     //   console.log("bruh")
     // }
-    const response = await Axios.get(`${backend_endpoint}/getcurrentdata/${topic}/${granularity}`);
+    const response = await Axios.get(`${backend_endpoint}/mqtt/getcurrentdata/${topic}/${granularity}`);
     for (const dp of response.data) {
       console.log(dp)
       // const currTime = dp.t ? dp.t * 1000 : undefined;
@@ -81,7 +81,7 @@ const LiveDataMQTT = (props) => {
       }
     }
     chart.redraw();
-    console.log("bruh")
+    // console.log("bruh")
     await requestData();
   }
 
@@ -129,7 +129,7 @@ const LiveDataMQTT = (props) => {
           // if (topicToSampleRef.current) {
             // console.log(topicToSampleRef.current)
         //   const callData = { table, year, month, day, hour, minute, second }; //need to add minute
-            const response = await Axios.get(`${backend_endpoint}/getlivedata/${topic}/${granularity}`);
+            const response = await Axios.get(`${backend_endpoint}/mqtt/getlivedata/${topic}/${granularity}`);
             const currTime = response.data.t ? response.data.t * 1000 : undefined;
             // console.log(currTime);
             // const xPoint = [currTime, response.data.x];
@@ -204,7 +204,7 @@ const LiveDataMQTT = (props) => {
           radius: 2
         },
         color: 'red',
-        name: 'Bx',
+        name: 'Bx 1 Minute Moving Average',
         // pointStart: startDate.getTime(),
         
         //describes the interval or time between each point
@@ -219,7 +219,7 @@ const LiveDataMQTT = (props) => {
           radius: 2
         },
         color: 'blue',
-        name: 'By',
+        name: 'By 1 Minute Moving Average',
         // pointStart: startDate.getTime(),
         
         //describes the interval or time between each point
@@ -234,58 +234,58 @@ const LiveDataMQTT = (props) => {
           radius: 2
         },
         color: 'green',
-        name: 'Bz',
+        name: 'Bz 1 Minute Moving Average',
         // pointStart: startDate.getTime(),
         
         //describes the interval or time between each point
         //set in milliseconds so 1000 => one second
         // pointInterval: 1000 //pointInterval set to sec onds
       },
-      {
-        data: bxAvg,
-        //data: [1, 2, 1, 4, 3, 6, 7, 3, 8, 6, 9, 4, 5, 10, 5, 1, 2, 3, 6, 2, 9, 5, 7, 2],
-        marker: {
-          enabled: true,
-          radius: 2
-        },
-        color: '#ffcccb',
-        name: 'BxAvg',
-        // pointStart: startDate.getTime(),
+      // {
+      //   data: bxAvg,
+      //   //data: [1, 2, 1, 4, 3, 6, 7, 3, 8, 6, 9, 4, 5, 10, 5, 1, 2, 3, 6, 2, 9, 5, 7, 2],
+      //   marker: {
+      //     enabled: true,
+      //     radius: 2
+      //   },
+      //   color: '#ffcccb',
+      //   name: 'BxAvg',
+      //   // pointStart: startDate.getTime(),
         
-        //describes the interval or time between each point
-        //set in milliseconds so 1000 => one second
-        // pointInterval: 1000 //pointInterval set to sec onds
-      },
-      {
-        data: byAvg,
-        //data: [1, 2, 1, 4, 3, 6, 7, 3, 8, 6, 9, 4, 5, 10, 5, 1, 2, 3, 6, 2, 9, 5, 7, 2],
-        marker: {
-          enabled: true,
-          radius: 2
-        },
-        color: '#add8e6',
-        name: 'ByAvg',
-        // pointStart: startDate.getTime(),
+      //   //describes the interval or time between each point
+      //   //set in milliseconds so 1000 => one second
+      //   // pointInterval: 1000 //pointInterval set to sec onds
+      // },
+      // {
+      //   data: byAvg,
+      //   //data: [1, 2, 1, 4, 3, 6, 7, 3, 8, 6, 9, 4, 5, 10, 5, 1, 2, 3, 6, 2, 9, 5, 7, 2],
+      //   marker: {
+      //     enabled: true,
+      //     radius: 2
+      //   },
+      //   color: '#add8e6',
+      //   name: 'ByAvg',
+      //   // pointStart: startDate.getTime(),
         
-        //describes the interval or time between each point
-        //set in milliseconds so 1000 => one second
-        // pointInterval: 1000 //pointInterval set to sec onds
-      },
-      {
-        data: bzAvg,
-        //data: [1, 2, 1, 4, 3, 6, 7, 3, 8, 6, 9, 4, 5, 10, 5, 1, 2, 3, 6, 2, 9, 5, 7, 2],
-        marker: {
-          enabled: true,
-          radius: 2
-        },
-        color: '#90ee90',
-        name: 'BzAvg',
-        // pointStart: startDate.getTime(),
+      //   //describes the interval or time between each point
+      //   //set in milliseconds so 1000 => one second
+      //   // pointInterval: 1000 //pointInterval set to sec onds
+      // },
+      // {
+      //   data: bzAvg,
+      //   //data: [1, 2, 1, 4, 3, 6, 7, 3, 8, 6, 9, 4, 5, 10, 5, 1, 2, 3, 6, 2, 9, 5, 7, 2],
+      //   marker: {
+      //     enabled: true,
+      //     radius: 2
+      //   },
+      //   color: '#90ee90',
+      //   name: 'BzAvg',
+      //   // pointStart: startDate.getTime(),
         
-        //describes the interval or time between each point
-        //set in milliseconds so 1000 => one second
-        // pointInterval: 1000 //pointInterval set to sec onds
-      },
+      //   //describes the interval or time between each point
+      //   //set in milliseconds so 1000 => one second
+      //   // pointInterval: 1000 //pointInterval set to sec onds
+      // },
     ],
     rangeSelector: {
         inputEnabled: true,
@@ -406,7 +406,7 @@ const handleSubmit = (event) => {
 
     return (
     <div style={{justifyContent: "center", display: "flex"}}>
-    <div style={{position: 'relative', width: '96%', border: "1.99px solid black"}}>
+    <div style={{position: 'relative', width: '96%', /*border: "1.99px solid black"*/}}>
         <Grid container>
           <Grid container xs={6}>
             <Grid item xs={12}  style={{textAlign: "center"}}>

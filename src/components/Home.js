@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import smartImg from './smart.png';
+import calculationsImg from './calculations.png';
 import Box from '@mui/material/Box';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from "react-router-dom";
@@ -42,7 +42,7 @@ function Home() {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <h1 className="text-4xl font-bold text-center mb-8">Welcome to SMART</h1>
+      <h1 className="text-4xl font-bold text-center mb-8">SMART Three Day Mag Solar Eclipse Campaign</h1>
         <div>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <div style={{ width: '100%', maxWidth: '600px', margin: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
@@ -59,7 +59,7 @@ function Home() {
                   marginBottom: '2rem',
                 }}
               >
-                This site is a web display of all lunar magnetic field data collected from the Apollo 12, 15, and Apollo 16 missions. It is open to the general public, and all are welcome to use it for whatever purposes at no cost.
+                This site is a web display of magnetometer data from the 3DM, USGS, and CPI/MagStar networks. Click on the points on the maps to view numerical data. To view time-series live data from the 3DM stations, select the station from the dropdown. For the live graph view, it is recommended to view in landscape mode on mobile.
               </Box>
             </div>
           </div>
@@ -100,6 +100,27 @@ function Home() {
               <MapChart valueID={6}/>
             </div>
           </div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
+              <Box
+                sx={{
+                  textAlign: 'left',
+                  fontSize: '1.15rem',
+                  fontWeight: 'medium',
+                  paddingLeft: 1.75,
+                  paddingRight: 1.75,
+                  paddingTop: 1.75,
+                  paddingBottom: 1.75,
+                  marginTop: '2rem',
+                  marginBottom: '2rem',
+                }}
+              >
+                <div style={{textAlign: 'center', paddingBottom: 10}}><b>How did we calculate the values displayed above?</b></div>
+                Calculations were made by calculating the first and second derivatives over the most recent 50 minute window of data, where five sets of consecutive 10-minute moving averages are calculated within that window.
+              <img src={calculationsImg} width="75%" height="60%" alt="SMART Image" className="mx-auto" />
+              </Box>
+            </div>
+          </div>
         </div>
       <span
         style={{
@@ -108,7 +129,7 @@ function Home() {
           marginBottom: '20px',
         }}
       >
-        <img src={smartImg} width="75%" height="60%" alt="SMART Image" className="mx-auto" />
+        {/* <img src={smartImg} width="75%" height="60%" alt="SMART Image" className="mx-auto" /> */}
       </span>
     </div>
   );
