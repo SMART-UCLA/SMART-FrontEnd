@@ -22,7 +22,7 @@ function Home() {
       {isAuthenticated ? (
         <div>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <div style={{ width: '30%', margin: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
               <Box
                 sx={{
                   textAlign: 'left',
@@ -40,28 +40,28 @@ function Home() {
               </Box>
             </div>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <div style={{ width: '30%', margin: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px' }}>
               <div style={{ fontWeight: 'bold', textDecoration: 'underline', marginTop: '30px' }}>X: First Derivative</div>
               <MapChart valueID={1}/>
             </div>
-            <div style={{ width: '30%', margin: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px' }}>
               <div style={{ fontWeight: 'bold', textDecoration: 'underline', marginTop: '30px' }}>Y: First Derivative</div>
               <MapChart valueID={2}/>
             </div>
-            <div style={{ width: '30%', margin: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px' }}>
               <div style={{ fontWeight: 'bold', textDecoration: 'underline', marginTop: '30px' }}>Z: First Derivative</div>
               <MapChart valueID={3}/>
             </div>
-            <div style={{ width: '30%', margin: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px' }}>
               <div style={{ fontWeight: 'bold', textDecoration: 'underline', marginTop: '30px' }}>X: Second Derivative</div>
               <MapChart valueID={4}/>
             </div>
-            <div style={{ width: '30%', margin: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px' }}>
               <div style={{ fontWeight: 'bold', textDecoration: 'underline', marginTop: '30px' }}>Y: Second Derivative</div>
               <MapChart valueID={5}/>
             </div>
-            <div style={{ width: '30%', margin: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px' }}>
               <div style={{ fontWeight: 'bold', textDecoration: 'underline', marginTop: '30px' }}>Z: Second Derivative</div>
               <MapChart valueID={6}/>
             </div>
