@@ -69,6 +69,19 @@ const MapChart = ({valueID}) => {
   const [clickedMarkerData, setClickedMarkerData] = useState(null);
   const [derivatives, setDerivatives] = useState({});
 
+  // Function to handle clicks outside of the marker
+  const handleClickOutsideMarker = (event) => {
+    if (!event.target.closest('circle')) {
+      setClickedMarkerData(null); 
+    }
+  };
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutsideMarker);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideMarker); // Remove event listener when component unmounts
+    };
+  }, []);
+
   function getRelevantValue(name, id) {
     switch (id) {
       case 1: return ["X First Derivative", derivatives[name.toLowerCase()][0].firstDerivatives[0].x, "[nT/(10m)]"]
@@ -79,8 +92,6 @@ const MapChart = ({valueID}) => {
       case 6: return ["Z Second Derivative", derivatives[name.toLowerCase()][1].secondDerivatives[2].z, "[nT/(10m)^2]"]
     }
   }
-
-  
 
   const fetchData = async () => {
     if (true) {
@@ -101,6 +112,7 @@ const MapChart = ({valueID}) => {
       }
     }
   };
+  
 
   useEffect(() => {
     fetchData();
