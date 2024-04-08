@@ -8,6 +8,9 @@ import {
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 
+const HEATMAP_MIN = -0.005;
+const HEATMAP_MAX = 0.005
+
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
 const threeDayMag = [
@@ -35,12 +38,12 @@ const threeDayMag = [
   
 
 const USGS = [
-  { name: "BOU", coordinates: [-105.237, 40.137] },
-  { name: "BSL", coordinates: [-89.635, 30.35] },
-  { name: "FRD", coordinates: [-77.373, 38.205] },
-  { name: "FRN", coordinates: [-119.718, 37.091] },
-  { name: "NEW", coordinates: [-117.122, 48.265] },
-  { name: "TUC", coordinates: [-110.733, 32.174] },
+  { name: "BOU", location: "Boulder", coordinates: [-105.237, 40.137] },
+  { name: "BSL", location: "Stennis Space Center", coordinates: [-89.635, 30.35] },
+  { name: "FRD", location: "Fredericksburg", coordinates: [-77.373, 38.205] },
+  { name: "FRN", location: "Fresno", coordinates: [-119.718, 37.091] },
+  { name: "NEW", location: "Newport",coordinates: [-117.122, 48.265] },
+  { name: "TUC", location: "Tucson",coordinates: [-110.733, 32.174] },
 ];
 
 const DASI = [
@@ -52,10 +55,31 @@ const DASI = [
   { name: "DASI_Virginia", location: "Virginia", coordinates: [-77.78404, 38.683352] },
 ];
 
-const MapChart = () => {
+function heatMapColorforValue(value, min, max){
+  if (value === null) {
+    return "hsl(197, 10%, 87%)";
+  }
+  const avg = (min + max) / 2
+  const adj_val = (value / (max - min)) + 0.5 - avg;
+  var h = (1.0 - adj_val) * 240
+  return "hsl(" + h + ", 100%, 50%)";
+}
+
+const MapChart = ({valueID}) => {
   const [hoveredPoint, setHoveredPoint] = useState(null);
   const [markerClickUrl, setMarkerClickUrl] = useState(null);
-  const [derivatives, setDerivatives] = useState([]);
+  const [derivatives, setDerivatives] = useState({});
+
+  function getRelevantValue(name, id) {
+    switch (id) {
+      case 1: return ["X First Derivative", derivatives[name.toLowerCase()][0].firstDerivatives[0].x, "[nT/(10m)]"]
+      case 2: return ["Y First Derivative", derivatives[name.toLowerCase()][0].firstDerivatives[1].y, "[nT/(10m)]"]
+      case 3: return ["Z First Derivative", derivatives[name.toLowerCase()][0].firstDerivatives[2].z, "[nT/(10m)]"]
+      case 4: return ["X Second Derivative", derivatives[name.toLowerCase()][1].secondDerivatives[0].x, "[nT/(10m)^2]"]
+      case 5: return ["Y Second Derivative", derivatives[name.toLowerCase()][1].secondDerivatives[1].y, "[nT/(10m)^2]"]
+      case 6: return ["Z Second Derivative", derivatives[name.toLowerCase()][1].secondDerivatives[2].z, "[nT/(10m)^2]"]
+    }
+  }
 
   useEffect(() => {
     if (markerClickUrl) {
@@ -64,25 +88,30 @@ const MapChart = () => {
     }
   }, [markerClickUrl]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (hoveredPoint) {
-        try {
-          // TODO change get request to deployment url
-          const response = await Axios.get(`http://localhost:8080/mqtt/get5-10minmovingAverages/${hoveredPoint.name.toLowerCase()}`);
-          console.log(`http://localhost:8080/mqtt/get5-10minmovingAverages/${hoveredPoint.name.toLowerCase()}`)
-          
-          const derivatives = response.data;
+  const fetchData = async () => {
+    if (true) {
+      try {
+        // TODO change get request to deployment url
+        // const response = await Axios.get(`http://localhost:8080/mqtt/get5-10minmovingAverages/${hoveredPoint.name.toLowerCase()}`);
+        // console.log(`http://localhost:8080/mqtt/get5-10minmovingAverages/${hoveredPoint.name.toLowerCase()}`)
+        const response = await Axios.get(`http://localhost:8080/mqtt/getAllDerivatives`);
+        console.log(`http://localhost:8080/mqtt/getAllDerivatives`);
+        
+        const derivatives = response.data;
+        console.log(derivatives);
 
-          setDerivatives(derivatives);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
+        setDerivatives(derivatives);
+        setTimeout(fetchData, 30000); // fetch data every 30 seconds
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
-    };
-  
+    }
+  };
+
+  useEffect(() => {
     fetchData();
-  }, [hoveredPoint]);
+  }, []);
+  // fetchData(); // fetch new data every minute
   
   return (
     <div>
@@ -104,19 +133,19 @@ const MapChart = () => {
             onMouseLeave={() => setHoveredPoint(null)}
             onClick={() => setMarkerClickUrl(url)}
           >
-            <circle r={10} fill="#008000" stroke="#fff" strokeWidth={2} />
+            <circle r={10} fill={heatMapColorforValue(derivatives.hasOwnProperty(name.toLowerCase()) ? getRelevantValue(name, valueID)[1] : null, HEATMAP_MIN, HEATMAP_MAX)} stroke="#008000" strokeWidth={3} />
           </Marker>
         ))}
         {/* Render markers for USGS */}
         {USGS.map(({ name, coordinates }) => (
           <Marker key={name} coordinates={coordinates}>
-            <circle r={7} fill="#E42A1D" stroke="#fff" strokeWidth={2} />
+            <circle r={7} fill="#E42A1D" stroke="#E42A1D" strokeWidth={3} />
           </Marker>
         ))}
         {/* Render markers for DASI */}
         {DASI.map(({ name, coordinates }) => (
           <Marker key={name} coordinates={coordinates}>
-            <circle r={7} fill="#1E90FF" stroke="#fff" strokeWidth={2} />
+            <circle r={7} fill="#1E90FF" stroke="#1E90FF" strokeWidth={3} />
           </Marker>
         ))}
       </ComposableMap>
@@ -125,16 +154,18 @@ const MapChart = () => {
         <h3>{hoveredPoint.name}</h3>
         <p>{hoveredPoint.location}</p>
         {/* Displaying first derivatives */}
-        {derivatives.length > 0 && (
+        {Object.keys(derivatives).length > 0 && (
           <>
-            <h4>First Derivatives</h4>
-              <span>X: {derivatives[0].firstDerivatives[0].x} ,</span>
-              <span> Y: {derivatives[0].firstDerivatives[1].y} ,</span>
-              <span> Z: {derivatives[0].firstDerivatives[2].z}</span>
+            {/* <h4>First Derivatives</h4>
+              <span>X: {derivatives[hoveredPoint.name.toLowerCase()][0].firstDerivatives[0].x} ,</span>
+              <span> Y: {derivatives[hoveredPoint.name.toLowerCase()][0].firstDerivatives[1].y} ,</span>
+              <span> Z: {derivatives[hoveredPoint.name.toLowerCase()][0].firstDerivatives[2].z}</span>
             <h4>Second Derivatives</h4>
-              <span>X: {derivatives[1].secondDerivatives[0].x} ,</span>
-              <span> Y: {derivatives[1].secondDerivatives[1].y} ,</span>
-              <span> Z: {derivatives[1].secondDerivatives[2].z}</span>
+              <span>X: {derivatives[hoveredPoint.name.toLowerCase()][1].secondDerivatives[0].x} ,</span>
+              <span> Y: {derivatives[hoveredPoint.name.toLowerCase()][1].secondDerivatives[1].y} ,</span>
+              <span> Z: {derivatives[hoveredPoint.name.toLowerCase()][1].secondDerivatives[2].z}</span> */}
+            <h4>{getRelevantValue(hoveredPoint.name, valueID)[0]}</h4>
+            <span>{getRelevantValue(hoveredPoint.name, valueID)[1]} {getRelevantValue(hoveredPoint.name, valueID)[2]}</span>
           </>
       )}
       </div>
