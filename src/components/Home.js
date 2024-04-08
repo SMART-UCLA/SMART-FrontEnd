@@ -43,7 +43,6 @@ function Home() {
   return (
     <div style={{ textAlign: 'center' }}>
       <h1 className="text-4xl font-bold text-center mb-8">SMART Three Day Mag Solar Eclipse Campaign</h1>
-      {isAuthenticated ? (
         <div>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <div style={{ width: '100%', maxWidth: '600px', margin: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
@@ -123,11 +122,6 @@ function Home() {
             </div>
           </div>
         </div>
-      ) : (
-        <p>
-          Please log in to access the content.
-        </p>
-      )}
       <span
         style={{
           display: 'inline-block',
