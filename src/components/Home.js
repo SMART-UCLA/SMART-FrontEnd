@@ -1,4 +1,4 @@
-import React  from 'react';
+import React, { useState } from 'react';
 import smartImg from './smart.png';
 import Box from '@mui/material/Box';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -10,34 +10,97 @@ import MapChart from './MapChart';
 function Home() {
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
   const navigate = useNavigate();
+  const urls = [
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/arkansas1/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/indiana1/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/new-hampshire1/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/oklahoma1/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/oklahoma2/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/texas1/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/arkansas2/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/indiana2/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/maine1/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/new-york1/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/maine2/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/new-york2/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic13/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic14/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic15/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic16/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic17/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic18/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic19/m",
+    "http://localhost:3000/SMART-FrontEnd#/LiveDataMQTT/topic20/m"
+  ];
+  const [selectedUrl, setSelectedUrl] = useState('');
 
-  const handleButtonClick = () => {
-    // Use navigate to navigate to the "/LiveDataMQTT" route
-    navigate('LiveDataMQTT/testTopic/s');
+  const handleDropdownChange = (event) => {
+    setSelectedUrl(event.target.value);
+    const url = event.target.value.split('#')[1]
+    navigate(url);
   };
 
   return (
     <div style={{ textAlign: 'center' }}>
       <h1 className="text-4xl font-bold text-center mb-8">Welcome to SMART</h1>
       {isAuthenticated ? (
-        <div style={{ width: '50%', margin: 'auto' }}>
-          <Box
-            sx={{
-              textAlign: 'left',
-              fontSize: '1.15rem',
-              fontWeight: 'medium',
-              paddingLeft: 1.75,
-              paddingRight: 1.75,
-              paddingTop: 1.75,
-              paddingBottom: 1.75,
-              border: 1,
-              marginTop: '2rem',
-              marginBottom: '2rem',
-            }}
-          >
-            This site is a web display of all lunar magnetic field data collected from the Apollo 12, 15, and Apollo 16 missions. It is open to the general public, and all are welcome to use it for whatever purposes at no cost.
-          </Box>
-          <MapChart valueID={1}/>
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
+              <Box
+                sx={{
+                  textAlign: 'left',
+                  fontSize: '1.15rem',
+                  fontWeight: 'medium',
+                  paddingLeft: 1.75,
+                  paddingRight: 1.75,
+                  paddingTop: 1.75,
+                  paddingBottom: 1.75,
+                  marginTop: '2rem',
+                  marginBottom: '2rem',
+                }}
+              >
+                This site is a web display of all lunar magnetic field data collected from the Apollo 12, 15, and Apollo 16 missions. It is open to the general public, and all are welcome to use it for whatever purposes at no cost.
+              </Box>
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px' }}>
+                <div style={{ fontWeight: 'bold', textDecoration: 'underline', marginTop: '30px' }}>Select your station to view your graphical data</div>
+                <select onChange={handleDropdownChange} value={selectedUrl}>
+                  <option value="">Select a Station</option>
+                  {urls.map((url, index) => {
+                    const topic = url.split('/LiveDataMQTT/')[1].split('/')[0];
+                    return <option key={index} value={url}>{topic}</option>; // Use the topic as the option value
+                  })}
+              </select>
+
+            </div>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px' }}>
+              <div style={{ fontWeight: 'bold', textDecoration: 'underline', marginTop: '30px' }}>X: First Derivative</div>
+              <MapChart valueID={1}/>
+            </div>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px' }}>
+              <div style={{ fontWeight: 'bold', textDecoration: 'underline', marginTop: '30px' }}>Y: First Derivative</div>
+              <MapChart valueID={2}/>
+            </div>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px' }}>
+              <div style={{ fontWeight: 'bold', textDecoration: 'underline', marginTop: '30px' }}>Z: First Derivative</div>
+              <MapChart valueID={3}/>
+            </div>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px' }}>
+              <div style={{ fontWeight: 'bold', textDecoration: 'underline', marginTop: '30px' }}>X: Second Derivative</div>
+              <MapChart valueID={4}/>
+            </div>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px' }}>
+              <div style={{ fontWeight: 'bold', textDecoration: 'underline', marginTop: '30px' }}>Y: Second Derivative</div>
+              <MapChart valueID={5}/>
+            </div>
+            <div style={{ width: '100%', maxWidth: '600px', margin: '10px' }}>
+              <div style={{ fontWeight: 'bold', textDecoration: 'underline', marginTop: '30px' }}>Z: Second Derivative</div>
+              <MapChart valueID={6}/>
+            </div>
+          </div>
         </div>
       ) : (
         <p>
@@ -51,9 +114,7 @@ function Home() {
           marginBottom: '20px',
         }}
       >
-
         <img src={smartImg} width="75%" height="60%" alt="SMART Image" className="mx-auto" />
-
       </span>
     </div>
   );

@@ -24,15 +24,6 @@ const Navbar = () => {
           <NavLink to="/" currentPath={location.pathname} onClick={() => handleNavLinkClick('/')}>
             Home
           </NavLink>
-          <NavLink to="/stations" currentPath={location.pathname} onClick={() => handleNavLinkClick('/stations')}>
-            Stations
-          </NavLink>
-          <NavLink to="/about" currentPath={location.pathname} onClick={() => handleNavLinkClick('/about')}>
-            About
-          </NavLink>
-          <NavLink to="/contact" currentPath={location.pathname} onClick={() => handleNavLinkClick('/contact')}>
-            Contact
-          </NavLink>
           {isAuthenticated ? (
             <>
               <NavLink to="/LiveDataMQTT/testTopic/s" currentPath={location.pathname} onClick={() => handleNavLinkClick('/LiveDataMQTT/testTopic/s')}>

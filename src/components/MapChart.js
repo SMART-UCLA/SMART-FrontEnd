@@ -66,9 +66,21 @@ function heatMapColorforValue(value, min, max){
 }
 
 const MapChart = ({valueID}) => {
-  const [hoveredPoint, setHoveredPoint] = useState(null);
-  const [markerClickUrl, setMarkerClickUrl] = useState(null);
+  const [clickedMarkerData, setClickedMarkerData] = useState(null);
   const [derivatives, setDerivatives] = useState({});
+
+  // Function to handle clicks outside of the marker
+  const handleClickOutsideMarker = (event) => {
+    if (!event.target.closest('circle')) {
+      setClickedMarkerData(null); 
+    }
+  };
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutsideMarker);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideMarker); // Remove event listener when component unmounts
+    };
+  }, []);
 
   function getRelevantValue(name, id) {
     switch (id) {
@@ -80,13 +92,6 @@ const MapChart = ({valueID}) => {
       case 6: return ["Z Second Derivative", derivatives[name.toLowerCase()][1].secondDerivatives[2].z, "[nT/(10m)^2]"]
     }
   }
-
-  useEffect(() => {
-    if (markerClickUrl) {
-      window.open(markerClickUrl, "_blank");
-      setMarkerClickUrl(null);
-    }
-  }, [markerClickUrl]);
 
   const fetchData = async () => {
     if (true) {
@@ -107,6 +112,7 @@ const MapChart = ({valueID}) => {
       }
     }
   };
+  
 
   useEffect(() => {
     fetchData();
@@ -129,9 +135,7 @@ const MapChart = ({valueID}) => {
           <Marker
             key={name}
             coordinates={coordinates}
-            onMouseEnter={() => setHoveredPoint({ name, location })}
-            onMouseLeave={() => setHoveredPoint(null)}
-            onClick={() => setMarkerClickUrl(url)}
+            onClick={() => setClickedMarkerData({ name, location })}
           >
             <circle r={10} fill={heatMapColorforValue(derivatives.hasOwnProperty(name.toLowerCase()) ? getRelevantValue(name, valueID)[1] : null, HEATMAP_MIN, HEATMAP_MAX)} stroke="#008000" strokeWidth={3} />
           </Marker>
@@ -149,25 +153,25 @@ const MapChart = ({valueID}) => {
           </Marker>
         ))}
       </ComposableMap>
-      {hoveredPoint && (
-      <div style={{ position: "absolute", backgroundColor: "white", padding: "10px", borderRadius: "5px", boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)" }}>
-        <h3>{hoveredPoint.name}</h3>
-        <p>{hoveredPoint.location}</p>
-        {/* Displaying first derivatives */}
-        {Object.keys(derivatives).length > 0 && (
-          <>
-            {/* <h4>First Derivatives</h4>
-              <span>X: {derivatives[hoveredPoint.name.toLowerCase()][0].firstDerivatives[0].x} ,</span>
-              <span> Y: {derivatives[hoveredPoint.name.toLowerCase()][0].firstDerivatives[1].y} ,</span>
-              <span> Z: {derivatives[hoveredPoint.name.toLowerCase()][0].firstDerivatives[2].z}</span>
-            <h4>Second Derivatives</h4>
-              <span>X: {derivatives[hoveredPoint.name.toLowerCase()][1].secondDerivatives[0].x} ,</span>
-              <span> Y: {derivatives[hoveredPoint.name.toLowerCase()][1].secondDerivatives[1].y} ,</span>
-              <span> Z: {derivatives[hoveredPoint.name.toLowerCase()][1].secondDerivatives[2].z}</span> */}
-            <h4>{getRelevantValue(hoveredPoint.name, valueID)[0]}</h4>
-            <span>{getRelevantValue(hoveredPoint.name, valueID)[1]} {getRelevantValue(hoveredPoint.name, valueID)[2]}</span>
-          </>
-      )}
+      {clickedMarkerData && (
+        <div style={{ position: "absolute", backgroundColor: "white", padding: "10px", borderRadius: "5px", boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)" }}>
+          <h3>{clickedMarkerData.name}</h3>
+          <p>{clickedMarkerData.location}</p>
+          {/* Displaying first derivatives */}
+          {Object.keys(derivatives).length > 0 && (
+            <>
+              {/* <h4>First Derivatives</h4>
+                <span>X: {derivatives[hoveredPoint.name.toLowerCase()][0].firstDerivatives[0].x} ,</span>
+                <span> Y: {derivatives[hoveredPoint.name.toLowerCase()][0].firstDerivatives[1].y} ,</span>
+                <span> Z: {derivatives[hoveredPoint.name.toLowerCase()][0].firstDerivatives[2].z}</span>
+              <h4>Second Derivatives</h4>
+                <span>X: {derivatives[hoveredPoint.name.toLowerCase()][1].secondDerivatives[0].x} ,</span>
+                <span> Y: {derivatives[hoveredPoint.name.toLowerCase()][1].secondDerivatives[1].y} ,</span>
+                <span> Z: {derivatives[hoveredPoint.name.toLowerCase()][1].secondDerivatives[2].z}</span> */}
+              <h4>{getRelevantValue(clickedMarkerData.name, valueID)[0]}</h4>
+              <span>{getRelevantValue(clickedMarkerData.name, valueID)[1]} {getRelevantValue(clickedMarkerData.name, valueID)[2]}</span>
+            </>
+        )}
       </div>
       )}
       {/* Legend */}
