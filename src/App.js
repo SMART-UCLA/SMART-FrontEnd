@@ -6,8 +6,6 @@ import LiveData from './components/LiveData';
 import LiveDataMQTT from './components/LiveDataMQTT'
 import TestGraph from './components/TestGraph'
 import TestHistoricalGraph from './components/TestHistoricalGraph';
-import AuthProvider from './auth/authConfiguration';
-import AuthGuard from './auth/authGuard';
 import Navbar from './components/Navbar';
 import Stations from './components/Stations';
 
