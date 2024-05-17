@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from "react-router-dom";
 import Navbar from './Navbar';
-import Profile from './Profile';
 import MapChart from './MapChart';
 
 function Home() {

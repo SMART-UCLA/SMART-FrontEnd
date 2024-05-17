@@ -2,10 +2,8 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import smartLogo from './logo.png';
-import { useAuth0 } from '@auth0/auth0-react';
 
 const Navbar = () => {
-  const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
   const navigate = useNavigate();
   const location = useLocation();
 
